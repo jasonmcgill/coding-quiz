@@ -1,0 +1,24 @@
+header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    
+}
+
+header p {
+    font-size: 20px;
+}
+
+.score {
+    width: 250px;
+    
+}
+
+.timer {
+    width: 250px;
+    
+}
+
+.main {
+    align-items: center;
+}
