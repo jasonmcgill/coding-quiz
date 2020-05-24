@@ -1,13 +1,68 @@
+var timerEl = document.getElementById("time");
+var bodyEl = document.getElementById("main");
+var waitingForAnswer = false;
 //startTimer function
-    //start timer that does
-        //every second decrease timer
-        //update timer element
-        //if timer === 0 then endGame()
+var timeLeft = 76;
+
+var timer = function() {
+var timeInterval = setInterval(function () {
+    //every second decrease timer
+    timeLeft--;
+    //update timer element
+    timerEl.textContent = timeLeft + " seconds remaining";
+    //when timer has 0 
+    if (timeLeft === -1) {
+        timerEl.textContent = "Times Up!";
+        clearInterval(timeInterval);
+    // call endGame() TO DOO!!!!!!
+    }
+}, 1000);
+};        
+        
 
 //displayBeginning function
-    //generate "Coding Quiz Challenge" element
+var displayBeginning = function() {
+    
+    //generates "Welcome to my coding quiz challenge!" 
+    var welcomeEl = document.createElement("h1");
+    welcomeEl.textContent = "Welcome to my coding quiz challenge!"
+    welcomeEl.className = "question"
+    
+    bodyEl.appendChild(welcomeEl);
+
     //generate "instructions" element
-    //generate button to startGame()
+    var instructions = document.createElement("p");
+    instructions.textContent = "Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will penalize your score/time by ten seconds!";
+    instructions.className = "instructions";
+
+    bodyEl.appendChild(instructions);
+    //generate button that calls startGame()    
+    var startQuiz = document.createElement("button");
+    startQuiz.textContent = "Start Quiz!";
+    startQuiz.className = "button";
+
+    startQuiz.addEventListener("click", startGame);
+    bodyEl.appendChild(startQuiz);
+}
+
+var startGame = function() {
+    //calls startTimer()
+    timer();
+    //for loop that runs through question array.length
+    for (var i=0; i < questionArray.length; i++){
+
+    }
+    
+    //call displayNewQuestion(question array[i])
+    //set waitingForAnswer to be true
+    //wait for waitingForAnswer to be false in while loop
+    //when for loop is finished calls endGame()
+};
+    
+
+
+
+displayBeginning();
 
 //displayNewQuestion function
     //inputs = question object
@@ -22,7 +77,7 @@
     //start timer to move on to nextQuestion()
 
 //nextQuestion function
-    //TO DO
+    //change waitingForAnswer to false
 
 //displayHighScoreEntry function
     //displays All Done! element
@@ -37,12 +92,6 @@
     //generate button for (startGame)
     //generate clear high scores button (clearHighScores)
 
-//startGame function
-    //calls startTimer()
-    //for loop that runs through question array.length
-        //call displayNewQuestion(question array[i])
-        // wait for next question TO DO!!!
-    //when loop is finished calls endGame()
 
     
 //endGame function

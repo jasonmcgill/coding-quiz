@@ -19,6 +19,36 @@ header p {
     
 }
 
-.main {
+#main {    
+    margin: 50px 150px;
+    display: block;
     align-items: center;
+    justify-content: center;
+}
+
+.question {
+    text-align: center;
+    font-weight: bold;
+    font-size: 32px;
+}
+
+.instructions {
+    text-align: center;
+    font-size: 18px;
+}
+
+.button {
+    margin: 0 auto;
+    padding: 5px;
+    background-color: crimson;
+    color: white;
+    border: 1.5px solid black;
+    border-radius: 5px;
+    display: block;
+    
+}
+
+.highScoreList {
+    background-color: rgba(220,20,60 , .5 );
+    color: white;
 }
