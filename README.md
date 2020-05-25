@@ -9,7 +9,7 @@ Made with:
 * Javascript
 
 [Link To Project](https://jasonmcgill.github.io/coding-quiz/)
-[Link To Repository] (https://github.com/jasonmcgill/coding-quiz)
+
 
 Here is a screenshot of the beginning page
 ![beginning](https://raw.githubusercontent.com/jasonmcgill/coding-quiz/master/assets/images/instructions.JPG)
