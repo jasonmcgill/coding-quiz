@@ -1,9 +1,12 @@
 var timerEl = document.getElementById("time");
 var bodyEl = document.getElementById("main");
 var waitingForAnswer = false;
-var timeLeft = 76;
-   
-    
+var timeLeft = 0;
+
+var singleAnswerChosen = false;
+
+var currentQuestion = 0; 
+var timeInterval = 0   
 
 //object for questions
 var questionArray = [
@@ -40,24 +43,24 @@ var questionArray = [
 
 //startTimer function
 var timer = function() {
-var timeInterval = setInterval(function () {
-    //every second decrease timer
-    timeLeft--;
-    //update timer element
-    timerEl.textContent = timeLeft + " seconds remaining";
-    //when timer has 0 
-    if (timeLeft === -1) {
-        timerEl.textContent = "Times Up!";
-        clearInterval(timeInterval);
-    // call endGame() TO DOO!!!!!!
-    }
-}, 1000);
+    timeInterval = setInterval(function () {
+        //every second decrease timer
+        timeLeft--;
+        //update timer element
+        timerEl.textContent = timeLeft;
+        //when timer has 0 
+        if (timeLeft <= -1) {
+            timerEl.textContent = "Times Up!";
+            timeLeft = 0;
+        endGame() 
+        }
+    }, 1000);
 };        
         
 
 //displayBeginning function
 var displayBeginning = function() {
-    
+    bodyEl.innerHTML = "";
     //generates "Welcome to my coding quiz challenge!" 
     var welcomeEl = document.createElement("h1");
     welcomeEl.textContent = "Welcome to my coding quiz challenge!"
@@ -80,7 +83,13 @@ var displayBeginning = function() {
     bodyEl.appendChild(startQuiz);
 }
 
-var startGame = function() {
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve,ms));
+}
+
+async function startGame() {
+    //adds time to timer
+    timeLeft = 76;
     //calls startTimer()
     timer();
     //for loop that runs through question array.length
@@ -91,7 +100,7 @@ var startGame = function() {
          waitingForAnswer = true;
          //wait for waitingForAnswer to be false in while loop
          while (waitingForAnswer) {
-
+            await sleep(1000);
          }
     
     }   
@@ -102,28 +111,140 @@ var startGame = function() {
 
 
 
-displayBeginning();
 
-//displayNewQuestion function
-    //inputs = question object
+//displays a new question
+var displayNewQuestion = function(questionObj) {
+    bodyEl.innerHTML = "";
     //generate question element
-    //generate ul element
-    //generate 4 li elements
-    //make all li elements clickable and call chooseAnswer(question object, [i])
+    var questionEl = document.createElement("h1");
+    questionEl.textContent = questionObj.question;
+    questionEl.className = "question"
+    
+    bodyEl.appendChild(questionEl);
 
-//displayAfterAnswer function
-    //input = is correct boolean
-    //generate right or wrong element from input
-    //start timer to move on to nextQuestion()
+    //generate ul for answer buttons
+    var answerContainer = document.createElement("ul");
+ 
+    
+    bodyEl.appendChild(answerContainer);
+    
+    //generate li answer buttons   
+    for (var answer = 0; answer < questionObj.answers.length; answer++) {
+        var answerButtons = document.createElement("li");
+        answerButtons.textContent = questionObj.answers[answer];
+        answerButtons.className = "button";
+        answerButtons.addEventListener("click", chooseAnswer.bind(null,questionObj, answer));
+        
+    answerContainer.appendChild(answerButtons);
+    }
+    
+    
+    //makes it so you can only select 1 answer
+    singleAnswerChosen = false;
+    
+}
 
-//nextQuestion function
-    //change waitingForAnswer to false
+
+var nextQuestion = function() {
+    waitingForAnswer = false;
+}
+
+
 
 //displayHighScoreEntry function
+var displayHighScoreEntry = function() {
+    bodyEl.innerHTML = "";
     //displays All Done! element
-    //displays "Your Final Score is (timer)"    
-    //displays form for initials with submit
+    var allDoneEl = document.createElement("h1");
+    allDoneEl.textContent = "All Done!";
+    allDoneEl.className = "question"
+
+    bodyEl.appendChild(allDoneEl);
+
+  
+    //displays "your final score is '' "
+   var finalScoreEl = document.createElement("p");
+   finalScoreEl.textContent = "Your final score is " + timeLeft + "!";
+   finalScoreEl.className = "instructions";
+
+   bodyEl.appendChild(finalScoreEl);
+    
+    //div box for form information
+    var formContainerEl = document.createElement("div");
+    formContainerEl.className = "form-container"
+
+    bodyEl.appendChild(formContainerEl);
+    
+         
+    //displays instructions for form
+    var enterInitialsEl = document.createElement("p");
+    enterInitialsEl.textContent = "Enter initials to save your high score!";
+    enterInitialsEl.className = "instructions";
+
+    formContainerEl.appendChild(enterInitialsEl);
+
+     //displays form for initials with submit
+    var initialsFormEl = document.createElement("INPUT");
+    initialsFormEl.setAttribute("placeholder", "initials");
+    initialsFormEl.className = "form-input"; 
+
+    formContainerEl.appendChild(initialsFormEl);
+
+    //displays submit button
+    var submitButtonEl = document.createElement("button");
+    submitButtonEl.textContent = "submit";
+    submitButtonEl.className = "submit-button";
+
+    formContainerEl.appendChild(submitButtonEl);
+
     //submit form calls highScoreSubmit function ( initials + timer)
+    submitButtonEl.addEventListener("click", highScoreSubmit)
+
+    formContainerEl.appendChild(submitButtonEl);
+
+}
+
+
+
+
+
+var chooseAnswer = function(questionObj, answer) {
+    if (singleAnswerChosen === false) {
+        //check if question object selected correct index
+        var isCorrect = (questionObj.correct === answer); 
+        //if incorrect timer -10
+        if (isCorrect === false) {
+            timeLeft = timeLeft -10;
+        }
+        //calls displayAfterAnswer( whether it was correct)
+        displayAfterAnswer(isCorrect);
+        singleAnswerChosen = true;
+    }
+}
+
+
+var displayAfterAnswer = function (isCorrect) {
+    //generate right or wrong element from input
+    if (isCorrect) {
+        var correctEl = document.createElement("h2");
+        correctEl.textContent = "Correct!";
+        correctEl.className = "after-answer-display"
+        
+        bodyEl.appendChild(correctEl);
+    }
+    else {
+        var wrongEl = document.createElement("h2");
+        wrongEl.textContent = "Wrong!";
+        wrongEl.className = "after-answer-display";
+        
+        bodyEl.appendChild(wrongEl);
+    }
+    
+    
+    //start timer to move on to nextQuestion()
+    setTimeout(nextQuestion, 2000);
+}
+
 
 //displayHighScoreList function
     //generate High Scores element
@@ -131,17 +252,6 @@ displayBeginning();
     //generate element for each item in local.storage
     //generate button for (startGame)
     //generate clear high scores button (clearHighScores)
-
-
-    
-//endGame function
-    //calls displayHighScoreEntry()
-
-//chooseAnswer function
-    //inputs = question object , answer [i]
-    //check if question object selected correct index
-    //if incorrect timer -10
-    //calls displayAfterAnswer( whether it was correct)
 
 //highScoreSubmit function
     //inputs initials + timer
@@ -152,3 +262,13 @@ displayBeginning();
     //prompt "are you sure?"
     //clear local.storage if prompt (true) and alert "scores cleared"
 
+
+
+var endGame = function() {
+    clearInterval(timeInterval);
+    displayHighScoreEntry();
+    
+}    
+
+
+displayBeginning();
