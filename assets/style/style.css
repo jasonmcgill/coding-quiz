@@ -42,7 +42,7 @@ header p {
 }
 
 .button {
-    margin: 0 auto;
+    margin: 5px auto;
     padding: 5px;
     background-color: crimson;
     color: white;
@@ -85,4 +85,8 @@ header p {
     font-size: 20px;
     color: rgba(0, 0, 0, 0.5);
     border-top: 3px solid rgba(0, 0, 0, 0.5);
+}
+
+.answer {
+    margin: 50px 25px 0px 25px;
 }
